@@ -13,25 +13,25 @@
 using namespace std;
 
 
-bool VerPal (int p[],int i,int &TAMS)
+bool VerPal ( int p[],int i,int &Tam)
 {
-    int iAux=0, iAux2=0;
+    int iAux=0, iAuxx=0;
     for(int iA=0; iA<i; iA++)
     {
         iAux+= p[iA];
-        iAux2+= p[iA] % 2;
+        iAuxx+= p[iA] % 2;
     }
     
-    if(iAux2> 1)
+    if(iAuxx > 1)
     {
         cout<<0<<endl;
         return false;
     }
     
-    TAMS= iAux;
-    if(iAux2==0)
+    Tam= iAux;
+    if(iAuxx==0)
     {
-        TAMS++;
+        Tam++;
     }
     
     return true;
@@ -39,59 +39,60 @@ bool VerPal (int p[],int i,int &TAMS)
 
 
 
-double Factorial(double f[],int x)
+double Factorial(double facto[],int x)
 {
     //la casilla 0 de la lista guarda el factorial más grande que se tiene guardado
-    if(f[0]<x)
+    if(facto[0]<x)
     {
-        double Aux=f[int (f[0])];
-        for(int i=int (f[0]);i<x+1;i++)
+        double Aux=facto[int (facto[0])];
+        for(int i=int (facto[0]);i<x+1;i++)
         {
             Aux*=i;
-            f[i]=Aux;
+            facto[i]=Aux;
         }
-        f[0]=x;// nuevo factorial mayor
+        
+        facto[0]=x;// nuevo factorial
     }
     
-    return f[x];
+    return facto[x]; //regresa mayor
     
 }
 
-void CargaValores( string s, int ArrValores[],int &i)
+void CargaValores( string sFrase, int ArrValores[],int &i) //Busca numero de combinaciones
 {
-    for(int c=0;c<s.length();c++)
+    for(int iC=0; iC<sFrase.length(); iC++)
     {
-        s[c]=toupper(s[c]);
+        sFrase[iC]=toupper(sFrase[iC]); //convierte min a mayusc
     }
     
-    char a;
-    int aux=0, n=0;
+    int aux=0, conta=0;
+    char cTemp;
     
-    while(s.length()!=0)
+    
+    while(sFrase.length()!=0)
     {
         
-        a=s[0];
+        cTemp=sFrase[0];
         
-        if(ispunct(a) || a==' ') //Mientras sea a
+        if(ispunct(cTemp) || cTemp==' ')
         {
-            s.erase(0,1);
+            sFrase.erase(0,1);
         }else{
             
-            s.erase(0,1);
+            sFrase.erase(0,1);
             aux++;
             
-            while(s.find(a)!=std::string::npos)
+            while(sFrase.find(cTemp)!=std::string::npos) // lo encuentra en la frase
             {
                 
-                if(s[n]==a)
+                if(sFrase[conta]==cTemp)
                 {
                     aux++;
-                    cout<<s<<endl;
-                    s.erase(n,1);
-                    n--;
+                    sFrase.erase(conta,1);
+                    conta--;
                     
                 }
-                n++;
+                conta++;
                 
             }
             //Mete los valores al arreglo
@@ -99,33 +100,33 @@ void CargaValores( string s, int ArrValores[],int &i)
             // Pasa a casilla de valores siguiente
             i++;
             aux=0;
-            n=0;
+            conta=0;
         }
         
     }
     
 }
 
-void Palindromo(int ArrValores[],int i,double fac[50])
+void Palindromo(int ArrValores[], int i, double facto[50])
 {
-    int TAMS=0;
+    int iTam=0;
     
     
-    if(VerPal(ArrValores, i, TAMS)) //Verifica  si es palindrome
+    if(VerPal(ArrValores, i, iTam)) //Verifica  si es palindrome
     {
-        double A=Factorial(fac, (TAMS-1)/2);
-        double B=1;
+        double A = Factorial(facto, (iTam-1)/2);
+        double B = 1;
         for(int c=0;c<i-1;c++)
-        {  if(ArrValores[c]%2==0)
         {
-            B*=Factorial(fac, (ArrValores[c])/2);
-        }else{
-            if(ArrValores[c]!=1)
-            {    B*=Factorial(fac, (ArrValores[c]-1)/2);
+            if(ArrValores[c]%2==0)
+                B*=Factorial(facto, (ArrValores[c])/2);
+            else
+            {
+                if(ArrValores[c]!=1)
+                    B*=Factorial(facto, (ArrValores[c]-1)/2);
             }
         }
-        }
-        cout<<A/B<<endl;
+        cout<< A/B <<endl;
         
     }
     
@@ -134,21 +135,21 @@ void Palindromo(int ArrValores[],int i,double fac[50])
 int main() {
     
     
-    int ArrValores[50], iNum;
+    int ArrValores[50], iNum=1;
     string sFrase;
     double fact[50]{1,1};
     
     
-    do{
-        cout<< "Teclea la frase:"<<endl;
+    while(iNum==1){
+        cout<< "Teclea la frase:"<<endl; //Recibe la frase
         getline(cin,sFrase);
         
-        int i=0;
+        int iX=0;
         
-        CargaValores(sFrase,ArrValores,i);
+        CargaValores(sFrase,ArrValores,iX);
         
-        Palindromo(ArrValores, i, fact);
-        i=0;
+        Palindromo(ArrValores, iX, fact);
+        iX=0;
         
         cout<< "Otra frase?"<<endl;
         cout<< "1. Si"<<endl;
@@ -156,9 +157,15 @@ int main() {
         
         cin>> iNum;
         cin.ignore();
-    } while(iNum==1);
+        
+    };
     
     return 0;
 }
 
-
+/*
+ A man, a plan, a canal, Panama!
+ arD,R!A
+ B.a.C1/
+ 12[’;. =1
+*/
